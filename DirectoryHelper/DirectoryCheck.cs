@@ -2,7 +2,7 @@ namespace FileSyncSSH.DirectoryHelper
 {
     public class DirectoryCheck : IDirectoryCheck
     {
-        public string Path { get; set; }
+        public string dir { get; set; }
 
         public DirectoryCheck(string Path)
         {
@@ -11,17 +11,17 @@ namespace FileSyncSSH.DirectoryHelper
                 throw new ArgumentNullException(@"directory", "cannot be null");
             }
 
-            this.Path = Path;
+            this.dir = Path;
 
         }
 
         public bool VerifyPath()
         {
-            DirectoryInfo di = new DirectoryInfo(this.Path);
+            DirectoryInfo di = new DirectoryInfo(this.dir);
 
             if (!di.Exists)
             {
-                throw new InvalidOperationException("Path does not exist: " + this.Path);
+                throw new InvalidOperationException("Path does not exist: " + this.dir);
             }
 
             return true;
@@ -29,8 +29,24 @@ namespace FileSyncSSH.DirectoryHelper
 
         public long GetNumberOfFile()
         {
-            return (from file in Directory.EnumerateFiles(this.Path, "*", SearchOption.AllDirectories)
-                    select file).Count();
+            DirectoryInfo di = new DirectoryInfo(this.dir);
+
+            return di.GetFiles("*", SearchOption.AllDirectories).Length;
+        }
+
+        public void PrintingListFile()
+        {
+            DirectoryInfo di = new DirectoryInfo(this.dir);
+            string dt = DateTime.Now.ToString("yyyy-M-dd");
+
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine("log", $"{dt}.txt")))
+            {
+                foreach (var file in di.GetFiles())
+                {
+                    Console.WriteLine(file.FullName);
+                    outputFile.WriteLine(file.FullName);
+                }
+            }
         }
     }
 }

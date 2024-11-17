@@ -5,5 +5,7 @@ namespace FileSyncSSH.DirectoryHelper
         long GetNumberOfFile();
 
         bool VerifyPath();
+
+        void PrintingListFile();
     }
 }

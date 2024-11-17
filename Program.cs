@@ -11,6 +11,7 @@ class Program
         {
             var count = dc.GetNumberOfFile();
             Console.WriteLine(count);
+            dc.PrintingListFile();
         }
     }
 }
