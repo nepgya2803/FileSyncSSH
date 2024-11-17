@@ -1,31 +1,36 @@
 namespace FileSyncSSH.DirectoryHelper
 {
-    public class DirectoryCheck
+    public class DirectoryCheck : IDirectoryCheck
     {
-        public string Directory { get; set; }
+        public string Path { get; set; }
 
-        private long fileCount { get; set; }
-
-        public DirectoryCheck(string directory)
+        public DirectoryCheck(string Path)
         {
-            if (String.IsNullOrEmpty(directory))
+            if (String.IsNullOrEmpty(Path))
             {
                 throw new ArgumentNullException(@"directory", "cannot be null");
             }
 
-            this.Directory = directory;
+            this.Path = Path;
 
         }
 
-        bool VerifyDirectory(string path)
+        public bool VerifyPath()
         {
-            DirectoryInfo di = new DirectoryInfo(path);
+            DirectoryInfo di = new DirectoryInfo(this.Path);
+
             if (!di.Exists)
             {
-                throw new InvalidOperationException("Path does not exist: " + path);
+                throw new InvalidOperationException("Path does not exist: " + this.Path);
             }
 
             return true;
+        }
+
+        public long GetNumberOfFile()
+        {
+            return (from file in Directory.EnumerateFiles(this.Path, "*", SearchOption.AllDirectories)
+                    select file).Count();
         }
     }
 }

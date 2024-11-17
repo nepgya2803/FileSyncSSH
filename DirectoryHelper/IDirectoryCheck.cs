@@ -4,6 +4,6 @@ namespace FileSyncSSH.DirectoryHelper
     {
         long GetNumberOfFile();
 
-        bool VerifyPath(string path);
+        bool VerifyPath();
     }
 }
